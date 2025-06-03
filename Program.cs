@@ -1,4 +1,6 @@
+using System.Threading.RateLimiting;
 using Asp.net_Web_Api.Data;
+using Asp.net_Web_Api.Meddlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<RateLimeterMeddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
