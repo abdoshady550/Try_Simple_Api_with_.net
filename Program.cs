@@ -4,7 +4,7 @@ using Asp.net_Web_Api.Meddlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Configuration.AddJsonFile("appsettings.json");
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -14,13 +14,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
 
 
-var configuration = new ConfigurationBuilder()
-     .AddJsonFile("appsettings.json")
-     .Build();
-var connStr = configuration.GetSection("constr").Value;
+
+
 
 builder.Services.AddDbContext<AppDbContext>(option => option
-.UseSqlServer(connStr));
+.UseSqlServer(builder.Configuration.GetSection("constr").Value));
 
 var app = builder.Build();
 

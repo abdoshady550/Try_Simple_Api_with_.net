@@ -16,12 +16,12 @@ namespace Asp.net_Web_Api.Controllers
 
         [HttpPost]
         [Route("")]
-        public async Task<ActionResult<int>> CreateProduct(Product product)
+        public async Task<ActionResult> CreateProduct(Product product)
         {
 
             _dbcontext.Products.Add(product);
             await _dbcontext.SaveChangesAsync();
-            return Ok(product.Id);
+            return Ok($"product {product.Name} added successfully");
 
         }
 
@@ -39,8 +39,8 @@ namespace Asp.net_Web_Api.Controllers
 
         }
         [HttpDelete]
-        [Route("")]
-        public async Task<ActionResult<int>> DeleteProductById(int id)
+        [Route("{id}")]
+        public async Task<ActionResult> DeleteProductById(int id)
         {
 
             var deletedItem = await _dbcontext.Products.
@@ -58,11 +58,12 @@ namespace Asp.net_Web_Api.Controllers
         }
         [HttpPut]
         [Route("")]
-        public async Task<ActionResult<int>> UpdateProductById(int id, string name, string sku)
+        public async Task<ActionResult> UpdateProductById(Product product)
         {
 
             var updatedItem = await _dbcontext.Products.
-                FirstOrDefaultAsync(x => x.Id == id);
+                FindAsync(product.Id);
+
             if (updatedItem == null)
             {
 
@@ -71,13 +72,13 @@ namespace Asp.net_Web_Api.Controllers
             }
             else
 
-                updatedItem.Name = name;
-            updatedItem.Sku = sku;
+                updatedItem.Name = product.Name;
+            updatedItem.Sku = product.Sku;
 
-
+            _dbcontext.Products.Update(updatedItem);
             await _dbcontext.SaveChangesAsync();
 
-            return Ok($"Product with ID {id} Updated successfully.");
+            return Ok($"Product with ID {product.Id} Updated successfully.");
         }
 
     }

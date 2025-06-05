@@ -4,6 +4,6 @@
     {
         public required int Id { get; set; }
         public required string Name { get; set; }
-        public required string sku { get; set; }
+        public required string Sku { get; set; }
     }
 }

@@ -13,15 +13,21 @@ namespace Asp.net_Web_Api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            modelBuilder.Entity<Product>().HasKey(x => x.Id);
             modelBuilder.Entity<Product>()
                         .Property(p => p.Id)
                         .ValueGeneratedOnAdd();
-            modelBuilder.Entity<Product>().ToTable("Products")
-                        .HasKey(x => x.Id);
+
             modelBuilder.Entity<Product>()
-                        .Property(p => p.sku)
+                        .Property(p => p.Sku)
                         .HasColumnName("Sku");
+
+            modelBuilder.Entity<Product>()
+                      .Property(p => p.Name)
+                      .HasColumnName("Name");
+
+            modelBuilder.Entity<Product>().ToTable("Products");
+
 
         }
     }
