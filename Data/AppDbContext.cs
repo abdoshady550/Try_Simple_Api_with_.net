@@ -24,7 +24,7 @@ namespace Asp.net_Web_Api.Data
 
             modelBuilder.Entity<Product>()
                       .Property(p => p.Name)
-                      .HasColumnName("Name");
+                      .HasColumnName("Name").IsRequired();
 
             modelBuilder.Entity<Product>().ToTable("Products");
 

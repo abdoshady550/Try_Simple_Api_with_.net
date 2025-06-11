@@ -1,6 +1,9 @@
 ﻿using Asp.net_Web_Api.Data;
+using Asp.net_Web_Api.Interface;
+using Asp.net_Web_Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Asp.net_Web_Api.Controllers
 {
@@ -8,10 +11,14 @@ namespace Asp.net_Web_Api.Controllers
     [Route("[Controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly AppDbContext _dbcontext;
-        public ProductsController(AppDbContext dbContext)
+
+        private readonly IProductService _iproductservice;
+
+        public ProductsController(AppDbContext dbContext, IProductService iproductservice)
         {
-            _dbcontext = dbContext;
+
+            _iproductservice = iproductservice;
+
         }
 
         [HttpPost]
@@ -19,9 +26,9 @@ namespace Asp.net_Web_Api.Controllers
         public async Task<ActionResult> CreateProduct(Product product)
         {
 
-            _dbcontext.Products.Add(product);
-            await _dbcontext.SaveChangesAsync();
-            return Ok($"product {product.Name} added successfully");
+            var created = await _iproductservice.CreateProductService(product);
+
+            return Ok(created.ToString());
 
         }
 
@@ -29,57 +36,33 @@ namespace Asp.net_Web_Api.Controllers
         [Route("")]
         public async Task<ActionResult<IEnumerable<object>>> GetAllProducts()
         {
-            var all = await _dbcontext.Products.Select(x => new
-            {
-                x.Id,
-                x.Name,
-                x.Sku
-            }).ToListAsync();
+            var all = await _iproductservice.GetAllProductsService();
             return Ok(all);
 
+        }
+        [HttpPut]
+        [Route("")]
+        public async Task<ActionResult> UpdateProductById(Product product)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var updated = await _iproductservice.UpdateProductByIdService(product);
+
+            if (!updated) return NotFound();
+
+            return Ok($"Product with ID {product.Id} Update successfully.");
         }
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult> DeleteProductById(int id)
         {
 
-            var deletedItem = await _dbcontext.Products.
-                FirstOrDefaultAsync(x => x.Id == id);
-            if (deletedItem == null)
-            {
-
-                return NotFound("cann't find this item");
-            }
-            else
-                _dbcontext.Products.Remove(deletedItem);
-            await _dbcontext.SaveChangesAsync();
-
+            var deletedItem = await _iproductservice.DeleteProductByIdService(id);
+            if (!deletedItem) return NotFound();
             return Ok($"Product with ID {id} deleted successfully.");
         }
-        [HttpPut]
-        [Route("")]
-        public async Task<ActionResult> UpdateProductById(Product product)
-        {
 
-            var updatedItem = await _dbcontext.Products.
-                FindAsync(product.Id);
-
-            if (updatedItem == null)
-            {
-
-                return NotFound("cann't find this item");
-
-            }
-            else
-
-                updatedItem.Name = product.Name;
-            updatedItem.Sku = product.Sku;
-
-            _dbcontext.Products.Update(updatedItem);
-            await _dbcontext.SaveChangesAsync();
-
-            return Ok($"Product with ID {product.Id} Updated successfully.");
-        }
 
     }
 }
