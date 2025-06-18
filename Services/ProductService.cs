@@ -1,4 +1,5 @@
 ﻿using Asp.net_Web_Api.Data;
+using Asp.net_Web_Api.Entities;
 using Asp.net_Web_Api.Interface;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;

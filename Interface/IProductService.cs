@@ -1,4 +1,4 @@
-﻿using Asp.net_Web_Api.Data;
+﻿using Asp.net_Web_Api.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Asp.net_Web_Api.Interface

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Asp.net_Web_Api.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Asp.net_Web_Api.Data
 {

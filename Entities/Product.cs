@@ -1,4 +1,4 @@
-﻿namespace Asp.net_Web_Api.Data
+﻿namespace Asp.net_Web_Api.Entities
 {
     public class Product
     {

@@ -1,6 +1,8 @@
 ﻿using Asp.net_Web_Api.Data;
+using Asp.net_Web_Api.Entities;
 using Asp.net_Web_Api.Interface;
 using Asp.net_Web_Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -9,6 +11,7 @@ namespace Asp.net_Web_Api.Controllers
 {
     [ApiController]
     [Route("[Controller]")]
+
     public class ProductsController : ControllerBase
     {
 
@@ -21,8 +24,19 @@ namespace Asp.net_Web_Api.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("")]
+        public async Task<ActionResult<IEnumerable<object>>> GetAllProducts()
+        {
+            var username = User.Identity.Name;
+            var all = await _iproductservice.GetAllProductsService();
+            return Ok(all);
+
+        }
         [HttpPost]
         [Route("")]
+        [Authorize]
         public async Task<ActionResult> CreateProduct(Product product)
         {
 
@@ -32,16 +46,9 @@ namespace Asp.net_Web_Api.Controllers
 
         }
 
-        [HttpGet]
-        [Route("")]
-        public async Task<ActionResult<IEnumerable<object>>> GetAllProducts()
-        {
-            var all = await _iproductservice.GetAllProductsService();
-            return Ok(all);
-
-        }
         [HttpPut]
         [Route("")]
+        [Authorize]
         public async Task<ActionResult> UpdateProductById(Product product)
         {
             if (!ModelState.IsValid)
@@ -55,6 +62,7 @@ namespace Asp.net_Web_Api.Controllers
         }
         [HttpDelete]
         [Route("{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteProductById(int id)
         {
 

@@ -1,8 +1,9 @@
-using System.Threading.RateLimiting;
+using Asp.net_Web_Api.Authentications;
 using Asp.net_Web_Api.Data;
 using Asp.net_Web_Api.Interface;
 using Asp.net_Web_Api.Meddlewares;
 using Asp.net_Web_Api.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,10 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddDbContext<AppDbContext>(option => option
 .UseSqlServer(builder.Configuration.GetSection("constr").Value));
+
+builder.Services.AddAuthentication()
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", null);
+
 
 builder.Services.AddScoped<IProductService, ProductService>();
 
