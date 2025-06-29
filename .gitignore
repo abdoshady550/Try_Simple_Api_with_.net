@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/bin/Debug/net8.0
+/Migrations
+/Properties
+/obj
+*.json
+/Asp.net_Web_Api.http
+/Asp.net_Web_Api.sln
+/Asp.net_Web_Api.csproj
+/Asp.net_Web_Api.csproj.user
